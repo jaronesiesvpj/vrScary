@@ -1,135 +1,473 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wonderland VR Showcase | Portal de Juegos WebXR</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fuente Inter y Orbitron -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 
-  <!-- Shared libraries between the application entry point and the components bundle -->
-  <script type="importmap">
-    {
-      "imports": {
-        "@wonderlandengine/api": "./node_modules/@wonderlandengine/api/index.js",
-        "@wonderlandengine/api/decorators.js": "./node_modules/@wonderlandengine/api/index.js"
-      }
-    }
-  </script>
-
-  <head>
-    
-    
-    <link rel="modulepreload" href="ScaryRoom-bundle.js?t=2026-10-26T20:02:34.438" as="script">
-    
-    
-    <link rel="modulepreload" href="ScaryRoom-app.js?t=2026-10-26T20:02:34.438" as="script">
-    <title>ScaryRoom</title>
-    <meta charset="utf-8" />
-
-    <meta property="og:title" content="ScaryRoom" />
-    <meta property="og:type" content="game" />
-    <meta property="og:description" content="Wonderland Engine based project." />
-    
-
-    <meta name="twitter:description" content="Wonderland Engine based project." />
-    <meta name="twitter:title" content="ScaryRoom" />
-    <meta name="twitter:card" content="summary_large_image" />
-    
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="white">
-    <style>
-    html {
-        height: 100%;
-    }
-    body {
-        height: 100%;
-        margin: 0px;
-        background-image: linear-gradient(black, #2b2b2b);
-    }
-    .xr-button-container {
-      display: block;
-      position: fixed;
-      width: 100%;
-      bottom: 0px;
-      display: flex;
-      justify-content: center;
-      pointer-events: none;
-    }
-
-    .button {
-      float: left;
-      width: 0px; /* Hidden until we know supported state */
-      padding-left: 10px;
-      padding-bottom: 25px;
-      display: block;
-      pointer-events: all;
-      cursor: pointer;
-      opacity: 0.25;
-    }
-    .button[data-supported] {
-      width: 100px !important;
-      transition: 0.5s;
-    }
-    .button[data-supported='true'] {
-      opacity: 1.0;
-    }
-
-    #canvas {
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      -khtml-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-      touch-action: none;
-    }
-
-    .xr-button-label {
-      fill: white;
-    }
-
-    .xr-button-frame {
-      stroke: white;
-    }
-
-    #version {
-      text-align: right;
-      position: absolute;
-      right: 10px;
-      bottom: 10px;
-      color: white;
-      font-size: 18pt;
-      font-family: monospace;
-      /*display: none; */
-      z-index: 99999;
-    }
-
-    #version a {
-      transition: opacity 0.5s;
-      opacity: 0;
-    }
-
-    #version:hover a{
-      opacity: 1;
-    }
-
-    </style>
-
-    
-
-    <script type="module" src="ScaryRoom-app.js?t=2026-10-26T20:02:34.438"></script>
-
-    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        neon: {
+                            cyan: '#00f0ff',
+                            purple: '#7000ff',
+                            pink: '#ff007f',
+                            dark: '#0a0a12',
+                            card: '#121225'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        orbitron: ['Orbitron', 'sans-serif']
+                    }
+                }
+            }
+        }
     </script>
-    
-  </head>
-  <body>
-    <canvas id="canvas" style="width: 100%; height: 100%; display: block;" tabindex="0"></canvas>
-    <div id="version">
-        <a>Wonderland Engine 1.6.1</a>
-    </div>
-    <div class="xr-button-container">
-      <a id="vr-button" class="button">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 109.41 65"><rect class="xr-button-frame" x="3.5" y="3.5" width="102.41" height="58" rx="16.68" style="fill:none;stroke-linejoin:round;stroke-width:7px"/><path class="xr-button-label" d="M36.24,48.84a2,2,0,0,1-1.78-1.15L23.39,17.46a1.84,1.84,0,0,1,1.78-1.84h5.45a1.8,1.8,0,0,1,1.66,1.21l7.29,20.42,7.28-20.42a1.8,1.8,0,0,1,1.67-1.21H54a1.84,1.84,0,0,1,1.78,1.84L44.67,47.69a2,2,0,0,1-1.78,1.15Z"/><path class="xr-button-label" d="M70.61,40H68v7a1.84,1.84,0,0,1-1.78,1.84H61.31A1.83,1.83,0,0,1,59.54,47V17.46a1.83,1.83,0,0,1,1.77-1.84H73s13,.12,13,12.22c0,6-3.21,9-6.42,10.5L86.38,47a1.76,1.76,0,0,1-1.77,1.84h-5.8a1.91,1.91,0,0,1-1.43-.69ZM68,32.09h5c2.24,0,4.08-1.15,4.08-4.25s-1.84-4.36-4.08-4.36H68Z"/></svg>
-      </a>
-      
-    </div>
-  </body>
+
+    <style>
+        /* Estilos personalizados para efectos Neón y Glassmorphism */
+        body {
+            background-color: #06060c;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(112, 0, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(0, 240, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(255, 0, 127, 0.05) 0%, transparent 60%);
+            background-attachment: fixed;
+        }
+
+        /* Efecto Glassmorphism */
+        .glass-card {
+            background: rgba(18, 18, 37, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Hover dinámico en las tarjetas */
+        .glass-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(0, 240, 255, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(0, 240, 255, 0.3),
+                        0 0 20px 0px rgba(112, 0, 255, 0.2);
+        }
+
+        /* Animación de resplandor para el texto */
+        .glow-text-cyan {
+            text-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+        }
+        
+        .glow-text-purple {
+            text-shadow: 0 0 12px rgba(112, 0, 255, 0.6);
+        }
+
+        /* Botón neón */
+        .btn-neon {
+            background: linear-gradient(135deg, #00f0ff 0%, #7000ff 100%);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-neon:hover {
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.8), 0 0 10px rgba(255, 0, 127, 0.6);
+            transform: scale(1.03);
+        }
+
+        /* Fondo retícula estilo Cyberpunk */
+        .cyber-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="text-gray-200 font-sans min-h-screen cyber-grid flex flex-col justify-between">
+
+    <!-- SECCIÓN DE ENCABEZADO / HERO -->
+    <header class="relative pt-12 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+        <!-- Badges Superiores -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-xs font-semibold tracking-wider uppercase text-gray-300">Wonderland Engine & WebXR</span>
+            <span class="text-xs text-neon-cyan font-bold px-1.5 py-0.5 rounded bg-neon-cyan/10 border border-neon-cyan/20">VR Ready</span>
+        </div>
+
+        <!-- Título Principal -->
+        <h1 class="font-orbitron text-4xl sm:text-6xl font-black tracking-wide text-white mb-4">
+            WONDERLAND <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-purple-400 to-neon-pink glow-text-cyan">VR SHOWCASE</span>
+        </h1>
+
+        <!-- Subtítulo -->
+        <p class="max-w-2xl mx-auto text-base sm:text-lg text-gray-400 leading-relaxed">
+            Explora nuestra colección inmersiva de experiencias en Realidad Virtual directamente desde tu navegador. Sin descargas, directo a WebXR.
+        </p>
+
+        <!-- Filtros o Buscador rápido opcional / Decoración -->
+        <div class="mt-8 flex justify-center items-center gap-4 text-xs text-gray-500 font-orbitron">
+            <span class="flex items-center gap-1"><i class="fas fa-vr-cardboard text-neon-cyan"></i> COMPATIBLE CON OCULUS / META QUEST</span>
+            <span class="hidden sm:inline">•</span>
+            <span class="hidden sm:flex items-center gap-1"><i class="fas fa-desktop text-neon-purple"></i> NAVEGADOR PC / MOVIL</span>
+        </div>
+    </header>
+
+    <!-- SECCIÓN DE JUEGOS (GRID 3x3) -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- =======================================================
+                 TARJETA DE JUEGO 1
+                 ======================================================= -->
+            <article class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between group">
+                <div>
+                    <!-- Imagen / Portada -->
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1509281373149-e957c6296406?q=80&w=800&auto=format&fit=crop" 
+                             alt="VR Scary Experience" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-neon-dark via-transparent to-transparent"></div>
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-red-500/20 text-red-400 border border-red-500/30 backdrop-blur-md">
+                            Terror / VR
+                        </span>
+                    </div>
+
+                    <!-- Contenido -->
+                    <div class="p-6">
+                        <h2 class="font-orbitron text-xl font-bold text-white mb-2 group-hover:text-neon-cyan transition-colors">
+                            VR Scary Escape
+                        </h2>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-4">
+                            Una experiencia de terror psicológico inmersiva desarrollada en Wonderland Engine. ¿Serás capaz de sobrevivir a la oscuridad?
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Botón de Lanzamiento -->
+                <div class="px-6 pb-6">
+                    <!-- ENLACE 1 (Cambiar href cuando tengas el link final) -->
+                    <a href="https://vrscary.jarones.workers.dev/Jose" target="_blank" rel="noopener noreferrer" 
+                       class="btn-neon w-full py-3 px-4 rounded-xl text-white font-orbitron font-bold text-sm tracking-wider flex items-center justify-center gap-2 group/btn">
+                        <i class="fas fa-vr-cardboard text-lg group-hover/btn:animate-bounce"></i>
+                        <span>LANZAR JUEGO VR</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- =======================================================
+                 TARJETA DE JUEGO 2
+                 ======================================================= -->
+            <article class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between group">
+                <div>
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" 
+                             alt="Cyber Neon Runner" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-neon-dark via-transparent to-transparent"></div>
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/30 backdrop-blur-md">
+                            Acción / Sci-Fi
+                        </span>
+                    </div>
+
+                    <div class="p-6">
+                        <h2 class="font-orbitron text-xl font-bold text-white mb-2 group-hover:text-neon-cyan transition-colors">
+                            Cyber Runner 2099
+                        </h2>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-4">
+                            Recorre pistas futuristas a alta velocidad en un mundo lleno de luces neón y obstáculos en 3D.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="px-6 pb-6">
+                    <!-- ENLACE 2 -->
+                    <a href="https://vrscary.jarones.workers.dev/" target="_blank" rel="noopener noreferrer" 
+                       class="btn-neon w-full py-3 px-4 rounded-xl text-white font-orbitron font-bold text-sm tracking-wider flex items-center justify-center gap-2 group/btn">
+                        <i class="fas fa-vr-cardboard text-lg group-hover/btn:animate-bounce"></i>
+                        <span>LANZAR JUEGO VR</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- =======================================================
+                 TARJETA DE JUEGO 3
+                 ======================================================= -->
+            <article class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between group">
+                <div>
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?q=80&w=800&auto=format&fit=crop" 
+                             alt="Space Exploration VR" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-neon-dark via-transparent to-transparent"></div>
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30 backdrop-blur-md">
+                            Exploración
+                        </span>
+                    </div>
+
+                    <div class="p-6">
+                        <h2 class="font-orbitron text-xl font-bold text-white mb-2 group-hover:text-neon-cyan transition-colors">
+                            Cosmic Odyssey
+                        </h2>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-4">
+                            Explora galaxias distantes y estaciones espaciales abandonadas con total libertad de movimiento WebXR.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="px-6 pb-6">
+                    <!-- ENLACE 3 -->
+                    <a href="https://vrscary.jarones.workers.dev/" target="_blank" rel="noopener noreferrer" 
+                       class="btn-neon w-full py-3 px-4 rounded-xl text-white font-orbitron font-bold text-sm tracking-wider flex items-center justify-center gap-2 group/btn">
+                        <i class="fas fa-vr-cardboard text-lg group-hover/btn:animate-bounce"></i>
+                        <span>LANZAR JUEGO VR</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- =======================================================
+                 TARJETA DE JUEGO 4
+                 ======================================================= -->
+            <article class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between group">
+                <div>
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=800&auto=format&fit=crop" 
+                             alt="Quantum Puzzle VR" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-neon-dark via-transparent to-transparent"></div>
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 backdrop-blur-md">
+                            Puzzles / 3D
+                        </span>
+                    </div>
+
+                    <div class="p-6">
+                        <h2 class="font-orbitron text-xl font-bold text-white mb-2 group-hover:text-neon-cyan transition-colors">
+                            Quantum Cube Puzzle
+                        </h2>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-4">
+                            Resuelve acertijos espaciales maniplando cubos de energía e interacciones físicas realistas.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="px-6 pb-6">
+                    <!-- ENLACE 4 -->
+                    <a href="https://vrscary.jarones.workers.dev/" target="_blank" rel="noopener noreferrer" 
+                       class="btn-neon w-full py-3 px-4 rounded-xl text-white font-orbitron font-bold text-sm tracking-wider flex items-center justify-center gap-2 group/btn">
+                        <i class="fas fa-vr-cardboard text-lg group-hover/btn:animate-bounce"></i>
+                        <span>LANZAR JUEGO VR</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- =======================================================
+                 TARJETA DE JUEGO 5
+                 ====================================================== -->
+            <article class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between group">
+                <div>
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop" 
+                             alt="Neon Beat VR" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-neon-dark via-transparent to-transparent"></div>
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-neon-pink/20 text-neon-pink border border-neon-pink/30 backdrop-blur-md">
+                            Ritmico / Música
+                        </span>
+                    </div>
+
+                    <div class="p-6">
+                        <h2 class="font-orbitron text-xl font-bold text-white mb-2 group-hover:text-neon-cyan transition-colors">
+                            Synthwave Beat VR
+                        </h2>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-4">
+                            Siente el ritmo y destruye bloques neón al compás de música synthwave electrónica.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="px-6 pb-6">
+                    <!-- ENLACE 5 -->
+                    <a href="https://vrscary.jarones.workers.dev/" target="_blank" rel="noopener noreferrer" 
+                       class="btn-neon w-full py-3 px-4 rounded-xl text-white font-orbitron font-bold text-sm tracking-wider flex items-center justify-center gap-2 group/btn">
+                        <i class="fas fa-vr-cardboard text-lg group-hover/btn:animate-bounce"></i>
+                        <span>LANZAR JUEGO VR</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- =======================================================
+                 TARJETA DE JUEGO 6
+                 ======================================================= -->
+            <article class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between group">
+                <div>
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop" 
+                             alt="Anime Arena VR" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-neon-dark via-transparent to-transparent"></div>
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30 backdrop-blur-md">
+                            Combate / Arena
+                        </span>
+                    </div>
+
+                    <div class="p-6">
+                        <h2 class="font-orbitron text-xl font-bold text-white mb-2 group-hover:text-neon-cyan transition-colors">
+                            Mecha Arena VR
+                        </h2>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-4">
+                            Pilota robots gigantes en batallas en tiempo real en esta intensa experiencia de combate virtual.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="px-6 pb-6">
+                    <!-- ENLACE 6 -->
+                    <a href="https://vrscary.jarones.workers.dev/" target="_blank" rel="noopener noreferrer" 
+                       class="btn-neon w-full py-3 px-4 rounded-xl text-white font-orbitron font-bold text-sm tracking-wider flex items-center justify-center gap-2 group/btn">
+                        <i class="fas fa-vr-cardboard text-lg group-hover/btn:animate-bounce"></i>
+                        <span>LANZAR JUEGO VR</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- =======================================================
+                 TARJETA DE JUEGO 7
+                 ======================================================= -->
+            <article class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between group">
+                <div>
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop" 
+                             alt="Retro Arcade VR" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-neon-dark via-transparent to-transparent"></div>
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 backdrop-blur-md">
+                            Arcade
+                        </span>
+                    </div>
+
+                    <div class="p-6">
+                        <h2 class="font-orbitron text-xl font-bold text-white mb-2 group-hover:text-neon-cyan transition-colors">
+                            Pixel Arcade VR
+                        </h2>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-4">
+                            Una recreativa virtual completa con minijuegos clásicos adaptados para controles de movimiento.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="px-6 pb-6">
+                    <!-- ENLACE 7 -->
+                    <a href="https://vrscary.jarones.workers.dev/" target="_blank" rel="noopener noreferrer" 
+                       class="btn-neon w-full py-3 px-4 rounded-xl text-white font-orbitron font-bold text-sm tracking-wider flex items-center justify-center gap-2 group/btn">
+                        <i class="fas fa-vr-cardboard text-lg group-hover/btn:animate-bounce"></i>
+                        <span>LANZAR JUEGO VR</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- =======================================================
+                 TARJETA DE JUEGO 8
+                 ======================================================= -->
+            <article class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between group">
+                <div>
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop" 
+                             alt="Mystic World VR" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-neon-dark via-transparent to-transparent"></div>
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 backdrop-blur-md">
+                            Fantasía / Rol
+                        </span>
+                    </div>
+
+                    <div class="p-6">
+                        <h2 class="font-orbitron text-xl font-bold text-white mb-2 group-hover:text-neon-cyan transition-colors">
+                            Spellcaster Realm
+                        </h2>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-4">
+                            Lanza hechizos usando gestos reales con las manos en un mundo fantástico impulsado por WebXR.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="px-6 pb-6">
+                    <!-- ENLACE 8 -->
+                    <a href="https://vrscary.jarones.workers.dev/" target="_blank" rel="noopener noreferrer" 
+                       class="btn-neon w-full py-3 px-4 rounded-xl text-white font-orbitron font-bold text-sm tracking-wider flex items-center justify-center gap-2 group/btn">
+                        <i class="fas fa-vr-cardboard text-lg group-hover/btn:animate-bounce"></i>
+                        <span>LANZAR JUEGO VR</span>
+                    </a>
+                </div>
+            </article>
+
+            <!-- =======================================================
+                 TARJETA DE JUEGO 9
+                 ======================================================= -->
+            <article class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between group">
+                <div>
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=800&auto=format&fit=crop" 
+                             alt="Matrix World VR" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-neon-dark via-transparent to-transparent"></div>
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-teal-500/20 text-teal-300 border border-teal-500/30 backdrop-blur-md">
+                            Simulación
+                        </span>
+                    </div>
+
+                    <div class="p-6">
+                        <h2 class="font-orbitron text-xl font-bold text-white mb-2 group-hover:text-neon-cyan transition-colors">
+                            Matrix Gravity Simulator
+                        </h2>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-4">
+                            Experimenta con la gravedad cero y físicas avanzadas optimizadas para navegadores móviles y visores VR.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="px-6 pb-6">
+                    <!-- ENLACE 9 -->
+                    <a href="https://vrscary.jarones.workers.dev/" target="_blank" rel="noopener noreferrer" 
+                       class="btn-neon w-full py-3 px-4 rounded-xl text-white font-orbitron font-bold text-sm tracking-wider flex items-center justify-center gap-2 group/btn">
+                        <i class="fas fa-vr-cardboard text-lg group-hover/btn:animate-bounce"></i>
+                        <span>LANZAR JUEGO VR</span>
+                    </a>
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+    <!-- FOOTER / PIE DE PÁGINA -->
+    <footer class="border-t border-white/10 mt-16 bg-black/40 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
+            <div>
+                <p class="text-sm font-orbitron text-gray-300">
+                    <span class="text-neon-cyan">Wonderland</span> VR Collection &copy; 2026
+                </p>
+                <p class="text-xs text-gray-500 mt-1">
+                    Desarrollado con <a href="https://wonderlandengine.com/" target="_blank" class="text-neon-purple hover:underline">Wonderland Engine</a> & WebXR API
+                </p>
+            </div>
+
+            <!-- Redes / Enlaces -->
+            <div class="flex items-center space-x-6 text-gray-400">
+                <a href="#" class="hover:text-neon-cyan transition-colors text-lg" title="Discord"><i class="fab fa-discord"></i></a>
+                <a href="#" class="hover:text-neon-cyan transition-colors text-lg" title="Twitter"><i class="fab fa-x-twitter"></i></a>
+                <a href="#" class="hover:text-neon-cyan transition-colors text-lg" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+</body>
 </html>
